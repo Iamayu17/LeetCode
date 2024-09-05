@@ -1,0 +1,239 @@
+When it comes to algorithmic problems, the “Two Sum Problem” on LeetCode is a classic. It’s a straightforward problem that tests your understanding of array processing and hash maps. In this post, we’ll explore three different solutions to this problem in Java and analyze their time and space complexity to determine which method is the most efficient. After the conclusion, you will find detailed step-by-step comments for each solution to further assist in understanding the logic and flow of each approach.
+
+Introduction
+The Two Sum Problem on LeetCode is described as follows:
+
+Given an array of integers, nums, and an integer target, return the indices of the two numbers that add up to the target. You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+You can return the answer in any order.
+
+The function signature in Java is as follows:
+
+public int[] twoSum(int[] nums, int target) {
+}
+Example 1:
+
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+Example 2:
+
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+Example 3:
+
+Input: nums = [3,3], target = 6
+Output: [0,1]
+Solution 1: Brute Force Approach
+Explanation
+In the brute force approach, we use two loops to compare each number with every other number in the array to find a pair that sums up to the target. The outer loop runs n times, and for each iteration of the outer loop, the inner loop runs n times as well, leading to a total of n * n iterations.
+
+Java Code
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] + nums[j] == target) {
+                    return new int[]{i, j};
+                }
+            }
+        }
+        return null;
+    }
+}
+Time Complexity
+O(n2) where n is the length of the array. This is because for each element in the array, we are checking every other element.
+
+Space Complexity
+O(1). This approach does not use any additional data structures that grow with input size; it only uses a constant amount of extra space to store variables.
+
+Solution 2: Two-Pass Hash Table
+Explanation
+In the Two-Pass Hash Table approach, we first iterate over the list and store each element and its index in a hash map. Then, in the second iteration, we check if the complement of each element (i.e., target - element) exists in the hash map. This method reduces the time complexity by trading it for additional space complexity.
+
+Java Code
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> numMap = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            numMap.put(nums[i], i);
+        }
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (numMap.containsKey(complement) && numMap.get(complement) != i) {
+                return new int[]{i, numMap.get(complement)};
+            }
+        }
+        return null;
+    }
+}
+Time Complexity
+O(n), as we only loop over the array twice sequentially (not nested).
+
+Space Complexity
+O(n), because we use a hash map to store the array elements and their indices, needing space that grows linearly with the input size.
+
+Solution 3: One-Pass Hash Table
+Explanation
+This approach further optimizes the Two-Pass Hash Table approach by combining the two steps into one. As we iterate over the array, we insert elements into the hash map and simultaneously check for the complement. This reduces the iterations over the array to a single pass.
+
+Java Code
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> numMap = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (numMap.containsKey(complement)) {
+                return new int[]{numMap.get(complement), i};
+            }
+            numMap.put(nums[i], i);
+        }
+        return null;
+    }
+}
+Time Complexity
+O(n), as we are looping through the array once.
+
+Space Complexity
+O(n), because a hash map is used to store the array elements and their indices.
+
+Conclusion
+After exploring the three different methods to solve the Two Sum Problem:
+
+The Brute Force approach is simple but the least efficient with a time complexity of O(n2) and space complexity of O(1).
+The Two-Pass Hash Table method improves the time complexity to O(n) but uses additional space O(n).
+The One-Pass Hash Table approach is the most efficient with O(n) time complexity and O(n) space complexity, as it optimizes the time by reducing the number of iterations over the array to one.
+if we prioritize time complexity, the One-Pass Hash Table approach stands out as the best choice among the three due to its optimal time and space complexity trade-off.
+
+LeetCode Problem
+Big O Notation Guide
+Thank you for reading! If you find this guide helpful, please consider highlighting, clapping, responding or connecting with me on Twitter/X as it’s very appreciated!
+
+Also check out my other Leetcode Walkthrough Lists:
+
+Palindrome Number Problem
+Step-by-Step Explanations with Code Comments
+In this section, each solution is broken down, providing the code with comments and step-by-step explanations for a deeper understanding.
+
+Solution 1: Brute Force Approach with Comments
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Iterate over the numbers in the array.
+        for (int i = 0; i < nums.length; i++) {
+            // For each number, iterate over the rest of the numbers in the array.
+            for (int j = i + 1; j < nums.length; j++) {
+                // Check if the current two numbers add up to the target.
+                if (nums[i] + nums[j] == target) {
+                    // If they do, return their indices.
+                    return new int[]{i, j};
+                }
+            }
+        }
+        // If no two numbers sum up to the target, return null.
+        return null;
+    }
+}
+Step 1: The outer loop iterates over the numbers in the array.
+
+Step 2: The inner loop iterates over the rest of the numbers for each number from the outer loop.
+
+Step 3: If a pair sums up to the target, their indices are returned.
+
+Step 4: If no such pair is found, null is returned.
+
+Solution 2: Two-Pass Hash Table with Comments
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Create a map to store the numbers and their indices.
+        Map<Integer, Integer> numMap = new HashMap<>();
+        // Add each number and its index to the map.
+        for (int i = 0; i < nums.length; i++) {
+            numMap.put(nums[i], i);
+        }
+        // Check for each number, if its complement exists in the map.
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            // Ensure the complement is not the number itself.
+            if (numMap.containsKey(complement) && numMap.get(complement) != i) {
+                // If complement exists, return the indices.
+                return new int[]{i, numMap.get(complement)};
+            }
+        }
+        // If no two numbers sum up to the target, return null.
+        return null;
+    }
+}
+Step 1: A map is created to store numbers and their indices.
+
+Step 2: Each number and its index are added to the map.
+
+Step 3: For each number, it checks if its complement exists in the map (ensuring it’s not the number itself).
+
+Step 4: If the complement exists, the indices are returned, otherwise, null is returned.
+
+Solution 3: One-Pass Hash Table with Comments
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Create a map to store the numbers and their indices.
+        Map<Integer, Integer> numMap = new HashMap<>();
+        // Iterate over the numbers in the array.
+        for (int i = 0; i < nums.length; i++) {
+            // Calculate the complement of the current number.
+            int complement = target - nums[i];
+            // If the complement exists in the map, return the indices.
+            if (numMap.containsKey(complement)) {
+                return new int[]{numMap.get(complement), i};
+            }
+            // Otherwise, add the current number and its index to the map.
+            numMap.put(nums[i], i);
+        }
+        // If no two numbers sum up to the target, return null.
+        return null;
+    }
+}
+Step 1: Again, a map is created to store numbers and their indices.
+
+Step 2: During iteration over the numbers, the complement is calculated for each number.
+
+Step 3: It checks if the complement exists in the map. If so, the indices are returned.
+
+Step 4: Otherwise, the current number and its index are added to the map.
+
+Step 5: If no pair sums up to the target, null is returned.
+
+Optional Better Practice: Error Handling
+In our current code examples, if no solution is found, the function returns null. As a better practice, consider throwing an exception instead to signify that no valid indices were found. This would allow the calling code to handle this error case more effectively and prevent potential issues that can arise from a null return value.
+
+Update the return statement in each example as follows:
+
+throw new IllegalArgumentException("No two sum solution");
+For instance, below is the modified version of the Brute Force approach:
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Iterating through the array to find two numbers that sum up to the target.
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                // If found, return their indices.
+                if (nums[i] + nums[j] == target) {
+                    return new int[]{i, j};
+                }
+            }
+        }
+        // If no such numbers are found, throw an IllegalArgumentException.
+        throw new IllegalArgumentException("No two sum solution");
+    }
+}
+In this version, instead of returning null, the method throws an IllegalArgumentException with a descriptive error message when no suitable numbers are found.
